@@ -113,8 +113,17 @@ class App extends Component {
               />
             </Fragment>
           ) } />
-          {
-            signedIn ? (
+          <Route path='/signup' exact render={ () => (
+            <Fragment>
+              <h2>Sign Up</h2>
+              <SignUpForm
+                onSignUp={ this.onSignUp }
+              />
+            </Fragment>
+          ) } />
+
+          <Route path='/account' exact render={ () => (
+            <Fragment>
               <div className='mb-3'>
                 <p>Email: { decodedToken.email }</p>
                 <p>Signed in at: { new Date(decodedToken.iat * 1000).toISOString() }</p>
@@ -123,33 +132,33 @@ class App extends Component {
                   Sign Out
                 </button>
               </div>
-            ) : (
-              <div>
-                <h2>Sign Up</h2>
-                <SignUpForm
-                  onSignUp={ this.onSignUp }
+            </Fragment>
+          ) } />
+
+
+          <Route path='/products' exact render={ () => (
+            <Fragment>
+              { products &&
+                <ProductList
+                  products={ products }
+                  editedProductID={ editedProductID }
+                  onEditProduct={ this.onBeginEditingProduct }
+                  onAddProductToWishlist={ this.onAddProductToWishlist }
+                  onRemoveProductFromWishlist={ this.onRemoveProductFromWishlist }
+                  renderEditForm={ (product) => (
+                    <div className='ml-3'>
+                      <ProductForm
+                        initialProduct={ product }
+                        submitTitle='Update Product'
+                        onSubmit={ this.onUpdateEditedProduct }
+                      />
+                    </div>
+                  ) }
                 />
-              </div>
-            )
-          }
-          { products &&
-            <ProductList
-              products={ products }
-              editedProductID={ editedProductID }
-              onEditProduct={ this.onBeginEditingProduct }
-              onAddProductToWishlist={ this.onAddProductToWishlist }
-              onRemoveProductFromWishlist={ this.onRemoveProductFromWishlist }
-              renderEditForm={ (product) => (
-                <div className='ml-3'>
-                  <ProductForm
-                    initialProduct={ product }
-                    submitTitle='Update Product'
-                    onSubmit={ this.onUpdateEditedProduct }
-                  />
-                </div>
-              ) }
-            />
-          }
+              }
+            </Fragment>
+          ) } />
+
           { signedIn &&
             <div className='mb-3'>
               <h2>Create Product</h2>
