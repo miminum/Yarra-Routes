@@ -7,6 +7,7 @@ import ProductList from "./components/ProductList";
 import ProductForm from "./components/ProductForm";
 import Wishlist from "./components/Wishlist";
 import PrimaryNav from "./components/PrimaryNav";
+import Error from "./components/Error";
 import { signIn, signUp, signOutNow } from "./api/auth";
 import { getDecodedToken } from "./api/token";
 import { listProducts, createProduct, updateProduct } from "./api/products";
@@ -26,9 +27,13 @@ class App extends Component {
   };
 
   onSignIn = ({ email, password }) => {
-    signIn({ email, password }).then(decodedToken => {
-      this.setState({ decodedToken });
-    });
+    signIn({ email, password })
+      .then(decodedToken => {
+        this.setState({ decodedToken });
+      })
+      .catch((error) => {
+        this.setState({ error });
+      })
   };
 
   onSignUp = ({ email, password, firstName, lastName }) => {
@@ -110,7 +115,7 @@ class App extends Component {
             signedIn={ signedIn }
           />
           { error && 
-            <p>{ error.message }</p>
+            <Error error={ error }/>
           }
           <Route
             path="/"
