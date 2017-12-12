@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import SignInForm from './components/SignInForm'
@@ -99,8 +99,20 @@ class App extends Component {
 
       <Router>
         <div className="App">
-          <h1>Yarra</h1>
-          <h2 className='mb-3'>Now Delivering: Shipping trillions of new products</h2>
+          <Route path='/' exact render={ () => (
+            <Fragment>
+              <h1>Yarra</h1>
+              <h2 className='mb-3'>Now Delivering: Shipping trillions of new products</h2>
+            </Fragment>
+          ) } />
+          <Route path='/signin' exact render={ () => (
+            <Fragment>
+              <h2>Sign In</h2>
+              <SignInForm
+                onSignIn={ this.onSignIn }
+              />
+            </Fragment>
+          ) } />
           {
             signedIn ? (
               <div className='mb-3'>
@@ -113,11 +125,6 @@ class App extends Component {
               </div>
             ) : (
               <div>
-                <h2>Sign In</h2>
-                <SignInForm
-                  onSignIn={ this.onSignIn }
-                />
-
                 <h2>Sign Up</h2>
                 <SignUpForm
                   onSignUp={ this.onSignUp }
@@ -152,12 +159,16 @@ class App extends Component {
               />
             </div>
           }
-          { signedIn && wishlist &&
-            <Wishlist
-              products={ wishlist.products }
-              onRemoveProductFromWishlist={ this.onRemoveProductFromWishlist }
-            />
-          }
+          <Route path='/wishlist' exact render={ () => (
+            <Fragment>
+              { signedIn && wishlist &&
+                <Wishlist
+                  products={ wishlist.products }
+                  onRemoveProductFromWishlist={ this.onRemoveProductFromWishlist }
+                />
+              }
+            </Fragment>
+          ) } />
         </div>
       </Router>
     );
