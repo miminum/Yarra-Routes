@@ -133,20 +133,28 @@ class App extends Component {
             path="/signin"
             exact
             render={() => (
-              <Fragment>
-                <h2>Sign In</h2>
-                <SignInForm onSignIn={this.onSignIn} />
-              </Fragment>
+              signedIn ? (
+                <Redirect to='/products'/>
+              ) : (
+                <Fragment>
+                  <h2>Sign In</h2>
+                  <SignInForm onSignIn={this.onSignIn} />
+                </Fragment>
+              )
             )}
           />
           <Route
             path="/signup"
             exact
             render={() => (
-              <Fragment>
-                <h2>Sign Up</h2>
-                <SignUpForm onSignUp={this.onSignUp} />
-              </Fragment>
+              signedIn ? (
+                <Redirect to='/products'/>
+              ) : (
+                <Fragment>
+                  <h2>Sign Up</h2>
+                  <SignUpForm onSignUp={this.onSignUp} />
+                </Fragment>
+              )
             )}
           />
 
@@ -175,9 +183,10 @@ class App extends Component {
             exact
             render={() => (
               <Fragment>
-                {products && (
+                { products && wishlist && (
                   <ProductList
-                    products={products}
+                    products={ products }
+                    productsInWishlist={ wishlist.products }
                     editedProductID={editedProductID}
                     onEditProduct={this.onBeginEditingProduct}
                     onAddProductToWishlist={this.onAddProductToWishlist}
