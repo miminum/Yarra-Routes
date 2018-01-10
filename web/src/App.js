@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import "./App.css";
-import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect, Switch } from "react-router-dom";
 import SignInForm from "./components/SignInForm";
 import SignUpForm from "./components/SignUpForm";
 import ProductList from "./components/ProductList";
@@ -117,6 +117,7 @@ class App extends Component {
           { error && 
             <Error error={ error }/>
           }
+          <Switch>
           <Route
             path="/"
             exact
@@ -245,6 +246,11 @@ class App extends Component {
                 </Fragment>
             ))}
           />
+            <Route render={ ({ location }) => (
+              <h2>Page not found: { location.pathname }</h2>
+            )} />
+
+          </Switch>
         </div>
       </Router>
     );
@@ -254,15 +260,17 @@ class App extends Component {
     const saveError = (error) => {
       this.setState({ error })
     }
-
+    // Load for everyone
+    listProducts()
+    .then(products => {
+      this.setState({ products });
+    })
+    .catch(saveError);
+    
     const { decodedToken } = this.state;
-    if (decodedToken) {
-      listProducts()
-        .then(products => {
-          this.setState({ products });
-        })
-        .catch(saveError);
 
+
+    if (decodedToken) {
       listWishlist()
         .then(wishlist => {
           this.setState({ wishlist });
